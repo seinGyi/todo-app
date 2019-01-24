@@ -2,6 +2,12 @@
   <div class="text-xs-center">
     <h1>TODOs</h1>
     <v-btn
+        color="primary"
+        flat
+        @click="lightOnOff()"
+    >Turn on lamp 
+    </v-btn>
+    <v-btn
         color="red lighten-2"
         @click="dialog = true"
         dark
@@ -70,6 +76,7 @@
         dialog: false,
         work: '',
         items: [],
+        light: false,
       }
     },
     mounted() {
@@ -82,6 +89,9 @@
         console.log('save')
         this.$electron.ipcRenderer.send('add-todo', this.work, this.items)
         this.dialog = false
+      },
+      lightOnOff() {
+        this.$electron.ipcRenderer.send('gpio', { type: 'lamp', value: this.light })
       },
     },
   }
