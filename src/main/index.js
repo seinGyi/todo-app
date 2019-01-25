@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron' // eslint-disable-line
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 import DataStore from '../renderer/DataStore'
 
 /**
@@ -53,14 +53,19 @@ ipcMain.on('add-todo', (event, data) => {
   event.sender.send('todo-list', dt.todos)
 })
 
-const socket = io('http://127.0.0.1:3000')
-socket.on('connect', () => {
-  console.log('connect to server')
-  ipcMain.on('gpio', (event, data) => {
-    console.log(data)
-    socket.emit('gpio', data)
-  })
+ipcMain.on('todo-list', (event) => {
+  const dt = todos.getTodos()
+  event.returnValue = dt.todos
 })
+
+// const socket = io('http://127.0.0.1:3000')
+// socket.on('connect', () => {
+//   console.log('connect to server')
+//   ipcMain.on('gpio', (event, data) => {
+//     console.log(data)
+//     socket.emit('gpio', data)
+//   })
+// })
 
 /**
  * Auto Updater
